@@ -1,0 +1,15 @@
+{
+  "title": "YOU ARE WHAT YOU PLAY",
+  "subtitle": "Your Steam Gaming Profile",
+  "width": 1600,
+  "height": 1600,
+  "top_games": 5,
+  "categories": 8,
+  "scale": "sqrt",
+  "palette": "colorblind-safe",
+  "background_top": "#0B1020",
+  "background_bottom": "#141B36",
+  "accent": "#4FC3F7",
+  "text": "#F5F7FF",
+  "muted": "#9AA4C7"
+}

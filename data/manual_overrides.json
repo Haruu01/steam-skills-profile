@@ -1,0 +1,6 @@
+{
+  "_comment": "Per-appid tag overrides. These always win over API tags. Keys are appids as strings.",
+  "730": ["FPS", "Shooter"],
+  "271590": ["Adventure", "Open World"],
+  "236390": ["Military", "Tanks", "Flight", "Vehicular Combat"]
+}

@@ -1,0 +1,114 @@
+{
+  "FPS": [
+    "FPS",
+    "First-Person Shooter",
+    "Shooter",
+    "Arena Shooter",
+    "Hero Shooter",
+    "Looter Shooter",
+    "Boomer Shooter"
+  ],
+  "Racing": [
+    "Racing",
+    "Racing Sim",
+    "Racing Simulation",
+    "Rally",
+    "Kart Racing",
+    "Arcade Racing"
+  ],
+  "Driving": [
+    "Driving",
+    "Vehicular Combat",
+    "Automobile Sim",
+    "Transportation",
+    "Truck Simulator"
+  ],
+  "Military": [
+    "Military",
+    "War",
+    "World War II",
+    "Modern",
+    "Cold War",
+    "Combat",
+    "Wargame"
+  ],
+  "Tanks": [
+    "Tanks",
+    "Tank",
+    "Armored",
+    "Armored Vehicles"
+  ],
+  "Simulation": [
+    "Simulation",
+    "Sim",
+    "Flight",
+    "Flight Sim",
+    "Space Sim",
+    "Naval",
+    "Life Sim",
+    "Economy",
+    "Building"
+  ],
+  "Music": [
+    "Music",
+    "Rhythm",
+    "Music-Based Procedural Generation",
+    "Audio Production",
+    "DJ"
+  ],
+  "RPG": [
+    "RPG",
+    "Action RPG",
+    "JRPG",
+    "CRPG",
+    "Roguelike",
+    "Roguelite",
+    "Dungeon Crawler",
+    "MMORPG"
+  ],
+  "Strategy": [
+    "Strategy",
+    "RTS",
+    "Turn-Based Strategy",
+    "Turn-Based Tactics",
+    "Tower Defense",
+    "Grand Strategy",
+    "4X",
+    "City Builder",
+    "Management"
+  ],
+  "Adventure": [
+    "Adventure",
+    "Action-Adventure",
+    "Point & Click",
+    "Visual Novel",
+    "Walking Simulator"
+  ],
+  "Survival": [
+    "Survival",
+    "Survival Horror",
+    "Open World Survival Craft",
+    "Crafting"
+  ],
+  "Sports": [
+    "Sports",
+    "Football",
+    "Soccer",
+    "Basketball",
+    "Golf",
+    "Fishing",
+    "Baseball"
+  ],
+  "Horror": [
+    "Horror",
+    "Psychological Horror",
+    "Survival Horror",
+    "Gore"
+  ],
+  "Puzzle": [
+    "Puzzle",
+    "Platformer",
+    "Puzzle Platformer",
+    "Logic"
+  ]
+}

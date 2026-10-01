@@ -1,0 +1,53 @@
+{
+  "order": [
+    "FPS",
+    "Racing",
+    "Driving",
+    "Military",
+    "Tanks",
+    "Simulation",
+    "Strategy",
+    "RPG",
+    "Adventure",
+    "Survival",
+    "Sports",
+    "Horror",
+    "Puzzle",
+    "Music",
+    "Other"
+  ],
+  "labels": {
+    "FPS": "FPS",
+    "Racing": "Racing",
+    "Driving": "Driving",
+    "Military": "Military",
+    "Tanks": "Tanks",
+    "Simulation": "Simulation",
+    "Strategy": "Strategy",
+    "RPG": "RPG",
+    "Adventure": "Adventure",
+    "Survival": "Survival",
+    "Sports": "Sports",
+    "Horror": "Horror",
+    "Puzzle": "Puzzle",
+    "Music": "Music",
+    "Other": "Other"
+  },
+  "colors": {
+    "FPS": "#4FC3F7",
+    "Racing": "#FF8A65",
+    "Driving": "#FFB74D",
+    "Military": "#81C784",
+    "Tanks": "#AED581",
+    "Simulation": "#BA68C8",
+    "Strategy": "#7986CB",
+    "RPG": "#F06292",
+    "Adventure": "#4DD0E1",
+    "Survival": "#A1887F",
+    "Sports": "#9575CD",
+    "Horror": "#E57373",
+    "Puzzle": "#FFD54F",
+    "Music": "#4DB6AC",
+    "Other": "#90A4AE"
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "appid": 236390,
+    "name": "War Thunder",
+    "playtime_forever": 48000,
+    "tags": ["Military", "Tanks", "Simulation", "Vehicular Combat"]
+  },
+  {
+    "appid": 730,
+    "name": "Counter-Strike 2",
+    "playtime_forever": 30000,
+    "tags": ["FPS", "Shooter"]
+  },
+  {
+    "appid": 107410,
+    "name": "Arma 3",
+    "playtime_forever": 18000,
+    "tags": ["Military", "Strategy", "Simulation"]
+  },
+  {
+    "appid": 244210,
+    "name": "Assetto Corsa",
+    "playtime_forever": 12000,
+    "tags": ["Racing", "Simulation"]
+  },
+  {
+    "appid": 227300,
+    "name": "Euro Truck Simulator 2",
+    "playtime_forever": 9000,
+    "tags": ["Driving", "Simulation"]
+  },
+  {
+    "appid": 400,
+    "name": "Portal",
+    "playtime_forever": 1200,
+    "tags": ["Puzzle"]
+  }
+]

@@ -1,0 +1,141 @@
+{
+  "profile": {
+    "steam_id": "fixture",
+    "persona_name": "",
+    "avatar": "",
+    "mode": "lifetime",
+    "aggregation": "weighted",
+    "scale": "sqrt",
+    "metadata_source": "fixture",
+    "generated_at": "2026-10-01T05:13:41Z"
+  },
+  "categories": {
+    "FPS": 100.0,
+    "Simulation": 97.5,
+    "Military": 77.5,
+    "Driving": 74.2,
+    "Tanks": 63.2,
+    "Strategy": 44.7,
+    "Racing": 44.7,
+    "Puzzle": 20.0
+  },
+  "category_hours": {
+    "FPS": 500.0,
+    "Simulation": 475.0,
+    "Military": 300.0,
+    "Driving": 275.0,
+    "Tanks": 200.0,
+    "Strategy": 100.0,
+    "Racing": 100.0,
+    "Puzzle": 20.0
+  },
+  "top_games": [
+    {
+      "name": "War Thunder",
+      "hours": 800.0
+    },
+    {
+      "name": "Counter-Strike 2",
+      "hours": 500.0
+    },
+    {
+      "name": "Arma 3",
+      "hours": 300.0
+    },
+    {
+      "name": "Assetto Corsa",
+      "hours": 200.0
+    },
+    {
+      "name": "Euro Truck Simulator 2",
+      "hours": 150.0
+    }
+  ],
+  "stats": {
+    "game_count": 6,
+    "total_hours": 1970.0
+  },
+  "games": [
+    {
+      "appid": 236390,
+      "name": "War Thunder",
+      "hours": 800.0,
+      "tags": [
+        "Military",
+        "Tanks",
+        "Simulation",
+        "Vehicular Combat"
+      ],
+      "categories": [
+        "Military",
+        "Tanks",
+        "Simulation",
+        "Driving"
+      ]
+    },
+    {
+      "appid": 730,
+      "name": "Counter-Strike 2",
+      "hours": 500.0,
+      "tags": [
+        "FPS",
+        "Shooter"
+      ],
+      "categories": [
+        "FPS"
+      ]
+    },
+    {
+      "appid": 107410,
+      "name": "Arma 3",
+      "hours": 300.0,
+      "tags": [
+        "Military",
+        "Strategy",
+        "Simulation"
+      ],
+      "categories": [
+        "Military",
+        "Strategy",
+        "Simulation"
+      ]
+    },
+    {
+      "appid": 244210,
+      "name": "Assetto Corsa",
+      "hours": 200.0,
+      "tags": [
+        "Racing",
+        "Simulation"
+      ],
+      "categories": [
+        "Racing",
+        "Simulation"
+      ]
+    },
+    {
+      "appid": 227300,
+      "name": "Euro Truck Simulator 2",
+      "hours": 150.0,
+      "tags": [
+        "Driving",
+        "Simulation"
+      ],
+      "categories": [
+        "Driving",
+        "Simulation"
+      ]
+    },
+    {
+      "appid": 400,
+      "name": "Portal",
+      "hours": 20.0,
+      "tags": [
+        "Puzzle"
+      ],
+      "categories": [
+        "Puzzle"
+      ]
+    }
+  ]
+}

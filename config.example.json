@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy to config.json and edit. Never put STEAM_API_KEY here; use .env.",
+  "steam_id": "",
+  "default_mode": "lifetime",
+  "top_games": 5,
+  "max_categories": 8,
+  "aggregation": "weighted",
+  "scale": "sqrt",
+  "metadata_source": "steamspy",
+  "include_other": true,
+  "cache_ttl_hours": 168
+}
