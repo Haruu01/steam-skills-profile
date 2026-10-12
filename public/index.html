@@ -1,349 +1,631 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Steam Gaming Profile</title>
-<style>
-  :root {
-    color-scheme: dark;
-    --bg: #0B1020;
-    --panel: #141B36;
-    --panel-2: #0e1428;
-    --border: #26304f;
-    --text: #F5F7FF;
-    --muted: #9AA4C7;
-    --accent: #4FC3F7;
-    --ok: #81C784;
-    --warn: #FFB74D;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(1200px 600px at 50% -10%, #1a2344 0%, var(--bg) 55%);
-    color: var(--text);
-    font: 15px/1.55 system-ui, "Segoe UI", Roboto, sans-serif;
-  }
-  a { color: var(--accent); }
-  header.topbar {
-    display: flex; align-items: center; gap: 16px;
-    padding: 16px 26px; border-bottom: 1px solid var(--border);
-    background: #0b1020cc; backdrop-filter: blur(8px);
-    position: sticky; top: 0; z-index: 10;
-  }
-  .brand { font-weight: 800; letter-spacing: .16em; font-size: 15px; }
-  .brand span { color: var(--accent); }
-  .status { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--border); border-radius: 999px; background: var(--panel-2); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
-  .dot.on { background: var(--ok); }
-  main { display: grid; grid-template-columns: 360px 1fr; gap: 26px; max-width: 1440px; margin: 0 auto; padding: 26px; }
-  @media (max-width: 980px) { main { grid-template-columns: 1fr; } }
-  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; padding: 22px; }
-  .panel h2 { margin: 0 0 18px; font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-  label { display: block; font-size: 12px; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; text-transform: uppercase; }
-  input[type=text], select, input[type=number] {
-    width: 100%; padding: 11px 13px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--panel-2); color: var(--text); font: inherit; outline: none;
-  }
-  input:focus, select:focus { border-color: var(--accent); }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .check { display: flex; align-items: center; gap: 9px; margin-top: 16px; color: var(--muted); text-transform: none; font-size: 14px; letter-spacing: 0; }
-  button {
-    width: 100%; margin-top: 20px; padding: 13px; border: 0; border-radius: 11px;
-    background: var(--accent); color: #04121f; font: 700 15px/1 inherit; cursor: pointer;
-  }
-  button:hover { filter: brightness(1.08); }
-  button:disabled { opacity: .55; cursor: progress; }
-  .btns { display: flex; gap: 10px; margin-top: 14px; }
-  .btns button {
-    flex: 1; text-align: center; padding: 11px; border-radius: 11px; margin: 0;
-    border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
-    font: 600 14px/1 inherit; cursor: pointer;
-  }
-  .btns button:hover { border-color: var(--accent); color: var(--accent); }
-  .muted { color: var(--muted); font-size: 13px; }
-  .error { margin-top: 16px; padding: 12px 14px; border-radius: 10px; border: 1px solid #7a3b3b; background: #2a1616; color: #ffb4b4; font-size: 14px; display: none; }
-  .preview-wrap { display: flex; flex-direction: column; gap: 18px; }
-  .hero { text-align: center; }
-  .hero h1 { margin: 0; font-size: clamp(26px, 3.4vw, 44px); letter-spacing: .04em; }
-  .hero p { margin: 6px 0 0; color: var(--muted); }
-  .infographic {
-    background: linear-gradient(180deg, #0f1730 0%, #141B36 100%);
-    border: 1px solid var(--border); border-radius: 22px; padding: 30px 34px 26px;
-    box-shadow: 0 30px 80px #0007;
-  }
-  .radar { display: flex; justify-content: center; }
-  .radar svg { width: 100%; max-width: 560px; height: auto; }
-  .radar .data-poly { animation: pop .55s ease-out; transform-origin: center; }
-  @keyframes pop { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px 18px; margin: 20px 0 4px; }
-  .legend .item { display: flex; align-items: center; gap: 9px; font-size: 13.5px; }
-  .legend .sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
-  .legend .val { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .topgames h3 { text-align: center; letter-spacing: .14em; margin: 26px 0 16px; font-size: 15px; }
-  .row { display: flex; align-items: center; gap: 14px; padding: 11px 4px; border-top: 1px solid #1e2743; }
-  .row .rank { color: var(--accent); font-weight: 700; width: 30px; font-variant-numeric: tabular-nums; }
-  .row .name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .row .hours { color: var(--muted); font-variant-numeric: tabular-nums; }
-  .stats { text-align: center; color: var(--muted); margin-top: 22px; font-size: 14px; }
-  .empty { text-align: center; color: var(--muted); padding: 60px 20px; }
-  .spinner { width: 26px; height: 26px; border: 3px solid #2a3557; border-top-color: var(--accent); border-radius: 50%; margin: 0 auto 14px; animation: spin 1s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steam Gaming Profile</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0B1020;
+      --panel: #141B36;
+      --panel-2: #0e1428;
+      --border: #26304f;
+      --text: #F5F7FF;
+      --muted: #9AA4C7;
+      --accent: #4FC3F7;
+      --ok: #81C784;
+      --warn: #FFB74D;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(1200px 600px at 50% -10%, #1a2344 0%, var(--bg) 55%);
+      color: var(--text);
+      font: 15px/1.55 system-ui, "Segoe UI", Roboto, sans-serif;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    header.topbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 26px;
+      border-bottom: 1px solid var(--border);
+      background: #0b1020cc;
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .16em;
+      font-size: 15px;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel-2);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--warn);
+    }
+
+    .dot.on {
+      background: var(--ok);
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 26px;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 26px;
+    }
+
+    @media (max-width: 980px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .panel h2 {
+      margin: 0 0 18px;
+      font-size: 15px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: .04em;
+      color: var(--muted);
+      margin: 14px 0 6px;
+      text-transform: uppercase;
+    }
+
+    input[type=text],
+    select,
+    input[type=number] {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    .grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 16px;
+      color: var(--muted);
+      text-transform: none;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 13px;
+      border: 0;
+      border-radius: 11px;
+      background: var(--accent);
+      color: #04121f;
+      font: 700 15px/1 inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: progress;
+    }
+
+    .btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btns button {
+      flex: 1;
+      text-align: center;
+      padding: 11px;
+      border-radius: 11px;
+      margin: 0;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      font: 600 14px/1 inherit;
+      cursor: pointer;
+    }
+
+    .btns button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .error {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #7a3b3b;
+      background: #2a1616;
+      color: #ffb4b4;
+      font-size: 14px;
+      display: none;
+    }
+
+    .preview-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(26px, 3.4vw, 44px);
+      letter-spacing: .04em;
+    }
+
+    .hero p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .infographic {
+      background: linear-gradient(180deg, #0f1730 0%, #141B36 100%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 30px 34px 26px;
+      box-shadow: 0 30px 80px #0007;
+    }
+
+    .radar {
+      display: flex;
+      justify-content: center;
+    }
+
+    .radar svg {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+    }
+
+    .radar .data-poly {
+      animation: pop .55s ease-out;
+      transform-origin: center;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(.2);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px 18px;
+      margin: 20px 0 4px;
+    }
+
+    .legend .item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13.5px;
+    }
+
+    .legend .sw {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex: none;
+    }
+
+    .legend .val {
+      margin-left: auto;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .topgames h3 {
+      text-align: center;
+      letter-spacing: .14em;
+      margin: 26px 0 16px;
+      font-size: 15px;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 11px 4px;
+      border-top: 1px solid #1e2743;
+    }
+
+    .row .rank {
+      color: var(--accent);
+      font-weight: 700;
+      width: 30px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .row .name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row .hours {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stats {
+      text-align: center;
+      color: var(--muted);
+      margin-top: 22px;
+      font-size: 14px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 26px;
+      height: 26px;
+      border: 3px solid #2a3557;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header class="topbar">
-  <div class="brand">STEAM <span>PROFILE</span></div>
-  <div class="status">
-    <span class="pill"><span id="keyDot" class="dot"></span> API key</span>
-    <span class="pill"><span id="idDot" class="dot"></span> <span id="idText">no SteamID</span></span>
-    <a href="/setup">Setup</a>
-    <a href="/api/auth/login">Sign in</a>
-  </div>
-</header>
-
-<main>
-  <section class="panel">
-    <h2>Generate</h2>
-    <label for="steamid">SteamID64 / profile URL</label>
-    <input id="steamid" type="text" placeholder="7656119…" autocomplete="off">
-
-    <div class="grid2">
-      <div>
-        <label for="aggregation">Aggregation</label>
-        <select id="aggregation">
-          <option value="weighted">Weighted</option>
-          <option value="full">Full attribution</option>
-          <option value="primary">Primary</option>
-        </select>
-      </div>
-      <div>
-        <label for="scale">Scale</label>
-        <select id="scale">
-          <option value="sqrt">sqrt</option>
-          <option value="linear">linear</option>
-          <option value="log">log</option>
-        </select>
-      </div>
-      <div>
-        <label for="top">Top games</label>
-        <input id="top" type="number" min="1" max="10" value="5">
-      </div>
-      <div>
-        <label for="categories">Categories</label>
-        <input id="categories" type="number" min="3" max="14" value="8">
-      </div>
+  <header class="topbar">
+    <div class="brand">STEAM <span>PROFILE</span></div>
+    <div class="status">
+      <span class="pill"><span id="keyDot" class="dot"></span> API key</span>
+      <span class="pill"><span id="idDot" class="dot"></span> <span id="idText">no SteamID</span></span>
+      <a href="/setup">Setup</a>
+      <a href="/api/auth/login">Sign in</a>
     </div>
+  </header>
 
-    <label class="check"><input id="includeOther" type="checkbox" checked> Fold small categories into Other</label>
+  <main>
+    <section class="panel">
+      <h2>Generate</h2>
+      <label for="steamid">SteamID64 / profile URL</label>
+      <input id="steamid" type="text" placeholder="7656119…" autocomplete="off">
 
-    <button id="generate">Generate profile</button>
-    <div id="error" class="error"></div>
-    <p class="muted" style="margin-top:16px">Runs on this machine using the Steam Web API key. Data is cached after the first fetch.</p>
-  </section>
+      <div class="grid2">
+        <div>
+          <label for="aggregation">Aggregation</label>
+          <select id="aggregation">
+            <option value="weighted">Weighted</option>
+            <option value="full">Full attribution</option>
+            <option value="primary">Primary</option>
+          </select>
+        </div>
+        <div>
+          <label for="scale">Scale</label>
+          <select id="scale">
+            <option value="sqrt">sqrt</option>
+            <option value="linear">linear</option>
+            <option value="log">log</option>
+          </select>
+        </div>
+        <div>
+          <label for="top">Top games</label>
+          <input id="top" type="number" min="1" max="10" value="5">
+        </div>
+        <div>
+          <label for="categories">Categories</label>
+          <input id="categories" type="number" min="3" max="14" value="8">
+        </div>
+      </div>
 
-  <section class="preview-wrap">
-    <div class="hero">
-      <h1>YOU ARE WHAT YOU PLAY</h1>
-      <p id="subtitle">Your Steam Gaming Profile</p>
-    </div>
-    <div id="preview" class="infographic">
-      <div class="empty" id="placeholder">Enter a SteamID and press Generate.<br><span class="muted">The first run fetches tags for every owned game, so it can take a minute.</span></div>
-    </div>
-    <div class="btns" id="downloadBar" style="display:none">
-      <button id="downloadPng" type="button">Download PNG</button>
-      <button id="downloadJson" type="button">Download JSON</button>
-    </div>
-  </section>
-</main>
+      <label class="check"><input id="includeOther" type="checkbox" checked> Fold small categories into Other</label>
 
-<script>
-const state = { colors: {}, profile: null };
-const FALLBACK = ["#4FC3F7","#FF8A65","#81C784","#BA68C8","#F06292","#4DD0E1","#FFD54F","#7986CB","#A1887F","#4DB6AC","#E57373","#9575CD","#AED581","#90A4AE"];
+      <button id="generate">Generate profile</button>
+      <div id="error" class="error"></div>
+      <p class="muted" style="margin-top:16px">Runs on this machine using the Steam Web API key. Data is cached after
+        the first fetch.</p>
+    </section>
 
-const $ = (id) => document.getElementById(id);
+    <section class="preview-wrap">
+      <div class="hero">
+        <h1>YOU ARE WHAT YOU PLAY</h1>
+        <p id="subtitle">Your Steam Gaming Profile</p>
+      </div>
+      <div id="preview" class="infographic">
+        <div class="empty" id="placeholder">Enter a SteamID and press Generate.<br><span class="muted">The first run
+            fetches tags for every owned game, so it can take a minute.</span></div>
+      </div>
+      <div class="btns" id="downloadBar" style="display:none">
+        <button id="downloadPng" type="button">Download PNG</button>
+        <button id="downloadJson" type="button">Download JSON</button>
+      </div>
+    </section>
+  </main>
 
-function params(withSteamId = true) {
-  const p = new URLSearchParams();
-  if (withSteamId) p.set("steamid", $("steamid").value.trim());
-  p.set("aggregation", $("aggregation").value);
-  p.set("scale", $("scale").value);
-  p.set("top", $("top").value);
-  p.set("categories", $("categories").value);
-  p.set("include_other", $("includeOther").checked ? "1" : "0");
-  return p;
-}
+  <script>
+    const state = { colors: {}, profile: null };
+    const FALLBACK = ["#4FC3F7", "#FF8A65", "#81C784", "#BA68C8", "#F06292", "#4DD0E1", "#FFD54F", "#7986CB", "#A1887F", "#4DB6AC", "#E57373", "#9575CD", "#AED581", "#90A4AE"];
 
-function colorFor(label, i) { return state.colors[label] || FALLBACK[i % FALLBACK.length]; }
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
+    const $ = (id) => document.getElementById(id);
 
-function radarSVG(categories) {
-  const labels = Object.keys(categories);
-  const values = labels.map((k) => Number(categories[k]));
-  if (labels.length < 3) return barsHTML(labels, values);
+    function params(withSteamId = true) {
+      const p = new URLSearchParams();
+      if (withSteamId) p.set("steamid", $("steamid").value.trim());
+      p.set("aggregation", $("aggregation").value);
+      p.set("scale", $("scale").value);
+      p.set("top", $("top").value);
+      p.set("categories", $("categories").value);
+      p.set("include_other", $("includeOther").checked ? "1" : "0");
+      return p;
+    }
 
-  const S = 560, cx = S / 2, cy = S / 2, R = 190;
-  const n = labels.length;
-  const ang = (i) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
-  const pt = (i, r) => [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))];
+    function colorFor(label, i) { return state.colors[label] || FALLBACK[i % FALLBACK.length]; }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
 
-  let grid = "";
-  [0.2, 0.4, 0.6, 0.8, 1].forEach((f) => {
-    const pts = labels.map((_, i) => pt(i, R * f).join(",")).join(" ");
-    grid += `<polygon points="${pts}" fill="none" stroke="#39466e" stroke-width="1"/>`;
-  });
-  labels.forEach((_, i) => {
-    const [x, y] = pt(i, R);
-    grid += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2a3557" stroke-width="1"/>`;
-  });
+    function radarSVG(categories) {
+      const labels = Object.keys(categories);
+      const values = labels.map((k) => Number(categories[k]));
+      if (labels.length < 3) return barsHTML(labels, values);
 
-  const dataPts = labels.map((_, i) => pt(i, (R * Math.max(0, values[i])) / 100).join(",")).join(" ");
-  const dots = labels.map((_, i) => {
-    const [x, y] = pt(i, (R * Math.max(0, values[i])) / 100);
-    return `<circle cx="${x}" cy="${y}" r="4" fill="#4FC3F7"/>`;
-  }).join("");
-  const labelEls = labels.map((l, i) => {
-    const cos = Math.cos(ang(i)), sin = Math.sin(ang(i));
-    const [x, y] = pt(i, R + 30);
-    const anchor = Math.abs(cos) < 0.25 ? "middle" : (cos > 0 ? "start" : "end");
-    const dy = Math.abs(sin) < 0.25 ? "0.35em" : (sin > 0 ? "0.9em" : "-0.2em");
-    return `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" dy="${dy}" fill="#F5F7FF" font-size="14">${escapeHtml(l)}</text>`;
-  }).join("");
+      const S = 560, cx = S / 2, cy = S / 2, R = 190;
+      const n = labels.length;
+      const ang = (i) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
+      const pt = (i, r) => [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))];
 
-  return `<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="Category radar chart">
+      let grid = "";
+      [0.2, 0.4, 0.6, 0.8, 1].forEach((f) => {
+        const pts = labels.map((_, i) => pt(i, R * f).join(",")).join(" ");
+        grid += `<polygon points="${pts}" fill="none" stroke="#39466e" stroke-width="1"/>`;
+      });
+      labels.forEach((_, i) => {
+        const [x, y] = pt(i, R);
+        grid += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2a3557" stroke-width="1"/>`;
+      });
+
+      const dataPts = labels.map((_, i) => pt(i, (R * Math.max(0, values[i])) / 100).join(",")).join(" ");
+      const dots = labels.map((_, i) => {
+        const [x, y] = pt(i, (R * Math.max(0, values[i])) / 100);
+        return `<circle cx="${x}" cy="${y}" r="4" fill="#4FC3F7"/>`;
+      }).join("");
+      const labelEls = labels.map((l, i) => {
+        const cos = Math.cos(ang(i)), sin = Math.sin(ang(i));
+        const [x, y] = pt(i, R + 30);
+        const anchor = Math.abs(cos) < 0.25 ? "middle" : (cos > 0 ? "start" : "end");
+        const dy = Math.abs(sin) < 0.25 ? "0.35em" : (sin > 0 ? "0.9em" : "-0.2em");
+        return `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" dy="${dy}" fill="#F5F7FF" font-size="14">${escapeHtml(l)}</text>`;
+      }).join("");
+
+      return `<svg viewBox="0 0 ${S} ${S}" role="img" aria-label="Category radar chart">
     ${grid}
     <polygon class="data-poly" points="${dataPts}" fill="#4FC3F7" fill-opacity="0.30" stroke="#4FC3F7" stroke-width="2.4"/>
     ${dots}${labelEls}
   </svg>`;
-}
+    }
 
-function barsHTML(labels, values) {
-  const max = Math.max(...values, 1);
-  return `<div>${labels.map((l, i) => `<div class="legend"><div class="item" style="grid-column:1/-1">
+    function barsHTML(labels, values) {
+      const max = Math.max(...values, 1);
+      return `<div>${labels.map((l, i) => `<div class="legend"><div class="item" style="grid-column:1/-1">
       <span style="width:110px">${escapeHtml(l)}</span>
       <span style="flex:1;background:#24304f;border-radius:6px;height:12px;display:block">
         <span style="display:block;height:12px;border-radius:6px;width:${(values[i] / max) * 100}%;background:#4FC3F7"></span>
       </span>
       <span class="val">${values[i]}</span></div></div>`).join("")}</div>`;
-}
+    }
 
-function legendHTML(categories, hours) {
-  const labels = Object.keys(categories);
-  return `<div class="legend">${labels.map((l, i) => {
-    const color = colorFor(l, i);
-    const h = hours && hours[l] != null ? ` · ${hours[l]}h` : "";
-    return `<div class="item"><span class="sw" style="background:${color}"></span>
+    function legendHTML(categories, hours) {
+      const labels = Object.keys(categories);
+      return `<div class="legend">${labels.map((l, i) => {
+        const color = colorFor(l, i);
+        const h = hours && hours[l] != null ? ` · ${hours[l]}h` : "";
+        return `<div class="item"><span class="sw" style="background:${color}"></span>
       <span>${escapeHtml(l)}</span><span class="val">${categories[l]}${h}</span></div>`;
-  }).join("")}</div>`;
-}
+      }).join("")}</div>`;
+    }
 
-function render(profile) {
-  state.profile = profile;
-  const cats = profile.categories || {};
-  const hours = profile.category_hours || {};
-  const top = profile.top_games || [];
-  const stats = profile.stats || {};
-  const topHTML = top.map((g, i) => `<div class="row">
+    function render(profile) {
+      state.profile = profile;
+      const cats = profile.categories || {};
+      const hours = profile.category_hours || {};
+      const top = profile.top_games || [];
+      const stats = profile.stats || {};
+      const topHTML = top.map((g, i) => `<div class="row">
       <span class="rank">${String(i + 1).padStart(2, "0")}</span>
       <span class="name">${escapeHtml(g.name)}</span>
       <span class="hours">${g.hours}h</span>
     </div>`).join("");
 
-  $("preview").innerHTML = `
+      $("preview").innerHTML = `
     <div class="radar">${radarSVG(cats)}</div>
     ${legendHTML(cats, hours)}
     <div class="topgames"><h3>YOUR TOP GAMES</h3>${topHTML || '<p class="muted" style="text-align:center">No games.</p>'}</div>
     <div class="stats">${stats.game_count || 0} games · ${stats.total_hours || 0}h total</div>`;
 
-  $("subtitle").textContent = profile.profile && profile.profile.persona_name
-    ? `${profile.profile.persona_name} · Steam Gaming Profile`
-    : "Your Steam Gaming Profile";
-  $("downloadBar").style.display = "flex";
-  $("downloadJson").disabled = false;
-}
+      $("subtitle").textContent = profile.profile && profile.profile.persona_name
+        ? `${profile.profile.persona_name} · Steam Gaming Profile`
+        : "Your Steam Gaming Profile";
+      $("downloadBar").style.display = "flex";
+      $("downloadJson").disabled = false;
+    }
 
-function showError(msg) { const el = $("error"); el.textContent = msg; el.style.display = "block"; }
-function clearError() { $("error").style.display = "none"; }
+    function showError(msg) { const el = $("error"); el.textContent = msg; el.style.display = "block"; }
+    function clearError() { $("error").style.display = "none"; }
 
-async function generate() {
-  clearError();
-  if (!$("steamid").value.trim()) { showError("Enter a SteamID or sign in through Steam first."); return; }
-  $("generate").disabled = true;
-  $("preview").innerHTML = '<div class="empty"><div class="spinner"></div>Generating… fetching Steam data and tags.</div>';
-  try {
-    const res = await fetch(`/api/profile?${params().toString()}`);
-    const data = await res.json();
-    if (!data.ok) { $("preview").innerHTML = '<div class="empty">Could not generate the profile.</div>'; showError(data.error || "Unknown error."); return; }
-    render(data.profile);
-  } catch (err) {
-    $("preview").innerHTML = '<div class="empty">Request failed.</div>';
-    showError(String(err));
-  } finally {
-    $("generate").disabled = false;
-  }
-}
+    async function generate() {
+      clearError();
+      if (!$("steamid").value.trim()) { showError("Enter a SteamID or sign in through Steam first."); return; }
+      $("generate").disabled = true;
+      $("preview").innerHTML = '<div class="empty"><div class="spinner"></div>Generating… fetching Steam data and tags.</div>';
+      try {
+        const res = await fetch(`/api/profile?${params().toString()}`);
+        const data = await res.json();
+        if (!data.ok) { $("preview").innerHTML = '<div class="empty">Could not generate the profile.</div>'; showError(data.error || "Unknown error."); return; }
+        render(data.profile);
+      } catch (err) {
+        $("preview").innerHTML = '<div class="empty">Request failed.</div>';
+        showError(String(err));
+      } finally {
+        $("generate").disabled = false;
+      }
+    }
 
-/* ---------- Client-side PNG export (no server rendering) ---------- */
-function radarSVGString(categories) {
-  const labels = Object.keys(categories);
-  const values = labels.map((k) => Number(categories[k]));
-  const cx = 800, cy = 560, R = 280, S = 1600;
-  if (labels.length < 3) return "";
-  const n = labels.length;
-  const ang = (i) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
-  const pt = (i, r) => [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))];
-  let out = "";
-  [0.2, 0.4, 0.6, 0.8, 1].forEach((f) => {
-    out += `<polygon points="${labels.map((_, i) => pt(i, R * f).join(",")).join(" ")}" fill="none" stroke="#39466e" stroke-width="1.4"/>`;
-  });
-  labels.forEach((_, i) => {
-    const [x, y] = pt(i, R);
-    out += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2a3557" stroke-width="1.4"/>`;
-  });
-  out += `<polygon points="${labels.map((_, i) => pt(i, (R * Math.max(0, values[i])) / 100).join(",")).join(" ")}" fill="#4FC3F7" fill-opacity="0.30" stroke="#4FC3F7" stroke-width="3.5"/>`;
-  labels.forEach((l, i) => {
-    const cos = Math.cos(ang(i)), sin = Math.sin(ang(i));
-    const [x, y] = pt(i, R + 46);
-    const anchor = Math.abs(cos) < 0.25 ? "middle" : (cos > 0 ? "start" : "end");
-    const dy = Math.abs(sin) < 0.25 ? "0.35em" : (sin > 0 ? "0.9em" : "-0.2em");
-    out += `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" dy="${dy}" fill="#F5F7FF" font-size="26" font-family="system-ui, Segoe UI, Arial, sans-serif">${escapeHtml(l)}</text>`;
-  });
-  return out;
-}
+    /* ---------- Client-side PNG export (no server rendering) ---------- */
+    function radarSVGString(categories) {
+      const labels = Object.keys(categories);
+      const values = labels.map((k) => Number(categories[k]));
+      const cx = 800, cy = 560, R = 280, S = 1600;
+      if (labels.length < 3) return "";
+      const n = labels.length;
+      const ang = (i) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
+      const pt = (i, r) => [cx + r * Math.cos(ang(i)), cy + r * Math.sin(ang(i))];
+      let out = "";
+      [0.2, 0.4, 0.6, 0.8, 1].forEach((f) => {
+        out += `<polygon points="${labels.map((_, i) => pt(i, R * f).join(",")).join(" ")}" fill="none" stroke="#39466e" stroke-width="1.4"/>`;
+      });
+      labels.forEach((_, i) => {
+        const [x, y] = pt(i, R);
+        out += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#2a3557" stroke-width="1.4"/>`;
+      });
+      out += `<polygon points="${labels.map((_, i) => pt(i, (R * Math.max(0, values[i])) / 100).join(",")).join(" ")}" fill="#4FC3F7" fill-opacity="0.30" stroke="#4FC3F7" stroke-width="3.5"/>`;
+      labels.forEach((l, i) => {
+        const cos = Math.cos(ang(i)), sin = Math.sin(ang(i));
+        const [x, y] = pt(i, R + 46);
+        const anchor = Math.abs(cos) < 0.25 ? "middle" : (cos > 0 ? "start" : "end");
+        const dy = Math.abs(sin) < 0.25 ? "0.35em" : (sin > 0 ? "0.9em" : "-0.2em");
+        out += `<text x="${x}" y="${y}" text-anchor="${anchor}" dominant-baseline="middle" dy="${dy}" fill="#F5F7FF" font-size="26" font-family="system-ui, Segoe UI, Arial, sans-serif">${escapeHtml(l)}</text>`;
+      });
+      return out;
+    }
 
-function buildInfographicSVG(profile) {
-  const cats = profile.categories || {};
-  const hours = profile.category_hours || {};
-  const top = profile.top_games || [];
-  const stats = profile.stats || {};
-  const labels = Object.keys(cats);
-  const W = 1600, H = 1600;
-  const font = "system-ui, Segoe UI, Arial, sans-serif";
+    function buildInfographicSVG(profile) {
+      const cats = profile.categories || {};
+      const hours = profile.category_hours || {};
+      const top = profile.top_games || [];
+      const stats = profile.stats || {};
+      const labels = Object.keys(cats);
+      const W = 1600, H = 1600;
+      const font = "system-ui, Segoe UI, Arial, sans-serif";
 
-  let legend = "";
-  const colX = [430, 900];
-  const perCol = Math.ceil(labels.length / 2) || 1;
-  labels.forEach((l, i) => {
-    const col = Math.floor(i / perCol), row = i % perCol;
-    const x = colX[col] || 430, y = 1000 + row * 44;
-    legend += `<rect x="${x}" y="${y - 13}" width="18" height="18" rx="4" fill="${colorFor(l, i)}"/>`;
-    legend += `<text x="${x + 30}" y="${y + 2}" fill="#F5F7FF" font-size="26" font-family="${font}">${escapeHtml(l)}</text>`;
-    legend += `<text x="${x + 320}" y="${y + 2}" text-anchor="end" fill="#9AA4C7" font-size="26" font-family="${font}">${cats[l]}${hours[l] != null ? " · " + hours[l] + "h" : ""}</text>`;
-  });
+      let legend = "";
+      const colX = [430, 900];
+      const perCol = Math.ceil(labels.length / 2) || 1;
+      labels.forEach((l, i) => {
+        const col = Math.floor(i / perCol), row = i % perCol;
+        const x = colX[col] || 430, y = 1000 + row * 44;
+        legend += `<rect x="${x}" y="${y - 13}" width="18" height="18" rx="4" fill="${colorFor(l, i)}"/>`;
+        legend += `<text x="${x + 30}" y="${y + 2}" fill="#F5F7FF" font-size="26" font-family="${font}">${escapeHtml(l)}</text>`;
+        legend += `<text x="${x + 320}" y="${y + 2}" text-anchor="end" fill="#9AA4C7" font-size="26" font-family="${font}">${cats[l]}${hours[l] != null ? " · " + hours[l] + "h" : ""}</text>`;
+      });
 
-  let rows = "";
-  top.forEach((g, i) => {
-    const y = 1290 + i * 54;
-    rows += `<text x="440" y="${y}" fill="#4FC3F7" font-size="30" font-weight="700" font-family="${font}">${String(i + 1).padStart(2, "0")}</text>`;
-    rows += `<text x="520" y="${y}" fill="#F5F7FF" font-size="30" font-family="${font}">${escapeHtml(g.name)}</text>`;
-    rows += `<text x="1160" y="${y}" text-anchor="end" fill="#9AA4C7" font-size="30" font-family="${font}">${g.hours}h</text>`;
-  });
+      let rows = "";
+      top.forEach((g, i) => {
+        const y = 1290 + i * 54;
+        rows += `<text x="440" y="${y}" fill="#4FC3F7" font-size="30" font-weight="700" font-family="${font}">${String(i + 1).padStart(2, "0")}</text>`;
+        rows += `<text x="520" y="${y}" fill="#F5F7FF" font-size="30" font-family="${font}">${escapeHtml(g.name)}</text>`;
+        rows += `<text x="1160" y="${y}" text-anchor="end" fill="#9AA4C7" font-size="30" font-family="${font}">${g.hours}h</text>`;
+      });
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
   <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0%" stop-color="#0B1020"/><stop offset="100%" stop-color="#141B36"/>
   </linearGradient></defs>
@@ -356,62 +638,63 @@ function buildInfographicSVG(profile) {
   ${rows}
   <text x="800" y="1560" text-anchor="middle" fill="#9AA4C7" font-size="32" font-family="${font}">${stats.game_count || 0} games · ${stats.total_hours || 0}h total</text>
 </svg>`;
-}
+    }
 
-function exportPng() {
-  if (!state.profile) return;
-  const svg = buildInfographicSVG(state.profile);
-  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const img = new Image();
-  img.onload = () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 1600; canvas.height = 1600;
-    canvas.getContext("2d").drawImage(img, 0, 0, 1600, 1600);
-    URL.revokeObjectURL(url);
-    canvas.toBlob((b) => downloadBlob(b, "steam_profile.png"), "image/png");
-  };
-  img.onerror = () => { URL.revokeObjectURL(url); showError("PNG export failed in this browser."); };
-  img.src = url;
-}
+    function exportPng() {
+      if (!state.profile) return;
+      const svg = buildInfographicSVG(state.profile);
+      const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1600; canvas.height = 1600;
+        canvas.getContext("2d").drawImage(img, 0, 0, 1600, 1600);
+        URL.revokeObjectURL(url);
+        canvas.toBlob((b) => downloadBlob(b, "steam_profile.png"), "image/png");
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); showError("PNG export failed in this browser."); };
+      img.src = url;
+    }
 
-function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
-}
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    }
 
-async function init() {
-  try {
-    const res = await fetch("/api/config");
-    const cfg = await res.json();
-    state.colors = cfg.colors || {};
-    if (cfg.steam_id) $("steamid").value = cfg.steam_id;
-    $("aggregation").value = cfg.defaults.aggregation || "weighted";
-    $("scale").value = cfg.defaults.scale || "sqrt";
-    $("top").value = cfg.defaults.top_games || 5;
-    $("categories").value = cfg.defaults.max_categories || 8;
-    $("includeOther").checked = cfg.defaults.include_other !== false;
-    $("keyDot").classList.toggle("on", !!cfg.has_api_key);
-    $("idDot").classList.toggle("on", !!cfg.steam_id);
-    $("idText").textContent = cfg.steam_id || "no SteamID";
-    if (cfg.steam_id) generate();
-  } catch (err) {
-    showError("Could not reach the server. Start it with: python serve.py");
-  }
-}
+    async function init() {
+      try {
+        const res = await fetch("/api/config");
+        const cfg = await res.json();
+        state.colors = cfg.colors || {};
+        if (cfg.steam_id) $("steamid").value = cfg.steam_id;
+        $("aggregation").value = cfg.defaults.aggregation || "weighted";
+        $("scale").value = cfg.defaults.scale || "sqrt";
+        $("top").value = cfg.defaults.top_games || 5;
+        $("categories").value = cfg.defaults.max_categories || 8;
+        $("includeOther").checked = cfg.defaults.include_other !== false;
+        $("keyDot").classList.toggle("on", !!cfg.has_api_key);
+        $("idDot").classList.toggle("on", !!cfg.steam_id);
+        $("idText").textContent = cfg.steam_id || "no SteamID";
+        if (cfg.steam_id) generate();
+      } catch (err) {
+        showError("Could not reach the server. Start it with: python serve.py");
+      }
+    }
 
-$("generate").addEventListener("click", generate);
-$("steamid").addEventListener("keydown", (e) => { if (e.key === "Enter") generate(); });
-$("downloadPng").addEventListener("click", exportPng);
-$("downloadJson").addEventListener("click", () => {
-  if (!state.profile) return;
-  downloadBlob(new Blob([JSON.stringify(state.profile, null, 2)], { type: "application/json" }), "steam_profile.json");
-});
-document.querySelectorAll("#aggregation, #scale, #top, #categories, #includeOther")
-  .forEach((el) => el.addEventListener("change", () => state.profile && generate()));
-init();
-</script>
+    $("generate").addEventListener("click", generate);
+    $("steamid").addEventListener("keydown", (e) => { if (e.key === "Enter") generate(); });
+    $("downloadPng").addEventListener("click", exportPng);
+    $("downloadJson").addEventListener("click", () => {
+      if (!state.profile) return;
+      downloadBlob(new Blob([JSON.stringify(state.profile, null, 2)], { type: "application/json" }), "steam_profile.json");
+    });
+    document.querySelectorAll("#aggregation, #scale, #top, #categories, #includeOther")
+      .forEach((el) => el.addEventListener("change", () => state.profile && generate()));
+    init();
+  </script>
 </body>
+
 </html>
