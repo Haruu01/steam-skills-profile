@@ -13,6 +13,48 @@ from .cache import JsonCache
 STEAM_API_BASE = "https://api.steampowered.com"
 STEAMID64_RE = re.compile(r"^7656119\d{10}$")
 
+# Titles matching these patterns are software/tools or pre-release builds,
+# not finished games. Kept lowercase for case-insensitive matching.
+NON_GAME_PATTERNS = [
+    r"\b(playtest|alpha|beta|demo|technical test|pre-?release)\b",
+    r"\b(server|dedicated server|benchmark|tool|editor|creator|maker)\b",
+    r"\brecord(ing)?\b",
+    r"\bst(r)?eam(ing)?\b",
+]
+NON_GAME_NAMES = {
+    "obs studio",
+    "action!",
+    "action",
+    "discord bot maker",
+    "discord bot - controls",
+    "emotelab",
+}
+
+
+def _repair_mojibake(text: str) -> str:
+    """Fix double-encoded names Steam sometimes returns (e.g. ``â„¢`` -> ``™``).
+
+    Steam's GetOwnedGames occasionally serves app names where UTF-8 bytes were
+    decoded as Windows-1252 and re-encoded. Re-encoding the mangled characters
+    back to cp1252 bytes and decoding as UTF-8 recovers the original text.
+    """
+    if not text:
+        return text
+    try:
+        return text.encode("cp1252").decode("utf-8")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+
+
+def is_non_game(name: str) -> bool:
+    """Return True when a title looks like software or a pre-release build."""
+    lowered = (name or "").strip().casefold()
+    if not lowered:
+        return False
+    if lowered in NON_GAME_NAMES:
+        return True
+    return any(re.search(pattern, lowered) for pattern in NON_GAME_PATTERNS)
+
 
 class SteamError(Exception):
     """Base class for Steam related failures."""
@@ -123,7 +165,7 @@ class SteamClient:
                 "steamid": steamid,
                 "include_appinfo": 1,
                 "include_played_free_games": 1,
-                "skip_unvetted_apps": 0,
+                "skip_unvetted_apps": 1,
             },
         )
         return payload.get("response", {}).get("games", []) or []
@@ -146,6 +188,8 @@ class SteamClient:
 
         if not raw:
             # Empty can mean private or genuinely empty; disambiguate.
+            if offline:
+                raise NoGames("No playable games were found in the cached library.")
             try:
                 summary = self.get_player_summary(steamid)
             except SteamError:
@@ -161,12 +205,18 @@ class SteamClient:
         for game in raw:
             if not game.get("appid"):
                 continue
+            playtime = int(game.get("playtime_forever", 0) or 0)
+            if playtime <= 0:
+                continue
+            name = _repair_mojibake(game.get("name") or "") or f"App {game['appid']}"
+            if is_non_game(name):
+                continue
             games.append(
                 {
                     "appid": int(game["appid"]),
-                    "name": game.get("name") or f"App {game['appid']}",
-                    "playtime_minutes": int(game.get("playtime_forever", 0) or 0),
-                    "hours": minutes_to_hours(game.get("playtime_forever", 0) or 0),
+                    "name": name,
+                    "playtime_minutes": playtime,
+                    "hours": minutes_to_hours(playtime),
                     "img_icon_url": game.get("img_icon_url", ""),
                 }
             )

@@ -486,7 +486,7 @@
       const dataPts = labels.map((_, i) => pt(i, (R * Math.max(0, values[i])) / 100).join(",")).join(" ");
       const dots = labels.map((_, i) => {
         const [x, y] = pt(i, (R * Math.max(0, values[i])) / 100);
-        return `<circle cx="${x}" cy="${y}" r="4" fill="#4FC3F7"/>`;
+        return `<circle cx="${x}" cy="${y}" r="4" fill="${colorFor(labels[i], i)}"/>`;
       }).join("");
       const labelEls = labels.map((l, i) => {
         const cos = Math.cos(ang(i)), sin = Math.sin(ang(i));

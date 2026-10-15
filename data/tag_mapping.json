@@ -64,7 +64,9 @@
     "Roguelike",
     "Roguelite",
     "Dungeon Crawler",
-    "MMORPG"
+    "MMORPG",
+    "MMO",
+    "Massively Multiplayer"
   ],
   "Strategy": [
     "Strategy",
@@ -110,5 +112,22 @@
     "Platformer",
     "Puzzle Platformer",
     "Logic"
+  ],
+  "Action": [
+    "Action",
+    "Action Game",
+    "Character Action Game",
+    "Arcade",
+    "Top-Down Shooter",
+    "Twin Stick Shooter"
+  ],
+  "Fighting": [
+    "Fighting",
+    "3D Fighter",
+    "2D Fighter",
+    "Beat 'em up",
+    "Beat 'em Up",
+    "Hack and Slash",
+    "Spectacle Fighter"
   ]
 }

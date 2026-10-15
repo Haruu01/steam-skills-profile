@@ -14,7 +14,11 @@ DEV_SECRET = "dev-insecure-session-secret"
 
 
 def _secret(secret: Optional[str] = None) -> bytes:
-    value = secret or os.environ.get("SESSION_SECRET") or DEV_SECRET
+    value = secret or os.environ.get("SESSION_SECRET")
+    if not value:
+        if os.environ.get("VERCEL_ENV") == "production" or os.environ.get("ENV") == "production":
+            raise RuntimeError("SESSION_SECRET must be set in production.")
+        value = DEV_SECRET
     return value.encode("utf-8")
 
 

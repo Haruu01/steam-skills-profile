@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
@@ -12,11 +11,7 @@ from .aggregate import aggregate
 from .cache import make_cache
 from .categorize import categorize_games, load_category_config, load_tag_mapping
 from .metadata import MetadataProvider, prefetch_tags
-from .steam_fetch import SteamClient, minutes_to_hours
-
-
-def _looks_like_steamid(value: str) -> bool:
-    return bool(re.match(r"^7656119\d{10}$", (value or "").strip()))
+from .steam_fetch import SteamClient, _repair_mojibake, minutes_to_hours
 
 
 def load_fixture(path: str | Path) -> Tuple[List[Dict[str, Any]], Dict[int, List[str]]]:
@@ -42,7 +37,7 @@ def load_fixture(path: str | Path) -> Tuple[List[Dict[str, Any]], Dict[int, List
         games.append(
             {
                 "appid": appid,
-                "name": entry.get("name") or f"App {appid}",
+                "name": _repair_mojibake(entry.get("name") or "") or f"App {appid}",
                 "hours": hours,
                 "playtime_minutes": int(entry.get("playtime_forever", hours * 60) or 0),
             }

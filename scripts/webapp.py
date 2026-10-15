@@ -31,10 +31,17 @@ CLAIMED_ID_RE = re.compile(r"/(\d{17})$")
 MODE_VALUES = ("weighted", "full", "primary")
 SCALE_VALUES = ("linear", "sqrt", "log")
 
-_rate_limiter = RateLimiter(
-    limit=int(os.environ.get("RATE_LIMIT", "10")),
-    window_seconds=int(os.environ.get("RATE_WINDOW_SECONDS", "600")),
-)
+_rate_limiter = None
+
+
+def _get_rate_limiter() -> RateLimiter:
+    global _rate_limiter
+    if _rate_limiter is None:
+        _rate_limiter = RateLimiter(
+            limit=int(os.environ.get("RATE_LIMIT", "10")),
+            window_seconds=int(os.environ.get("RATE_WINDOW_SECONDS", "600")),
+        )
+    return _rate_limiter
 
 
 def build_login_url(base_url: str) -> str:
@@ -118,6 +125,7 @@ def build_profile_payload(
     cache_key = "|".join(
         [
             steam_id,
+            mode,
             aggregation,
             scale,
             str(top_games),
@@ -173,7 +181,7 @@ def get_config_payload(cookie_header: Optional[str], api_key: str) -> Dict[str, 
 
 
 def check_rate_limit(identifier: str) -> Dict[str, Any]:
-    return _rate_limiter.check(identifier)
+    return _get_rate_limiter().check(identifier)
 
 
 def error_status(exc: Exception) -> Tuple[int, str]:

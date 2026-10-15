@@ -14,6 +14,8 @@
     "Horror",
     "Puzzle",
     "Music",
+    "Action",
+    "Fighting",
     "Other"
   ],
   "labels": {
@@ -31,6 +33,8 @@
     "Horror": "Horror",
     "Puzzle": "Puzzle",
     "Music": "Music",
+    "Action": "Action",
+    "Fighting": "Fighting",
     "Other": "Other"
   },
   "colors": {
@@ -48,6 +52,8 @@
     "Horror": "#E57373",
     "Puzzle": "#FFD54F",
     "Music": "#4DB6AC",
+    "Action": "#F4511E",
+    "Fighting": "#EC407A",
     "Other": "#90A4AE"
   }
 }
