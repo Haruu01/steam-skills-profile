@@ -1,8 +1,9 @@
 # Deploying to Vercel
 
-The web app is a set of Vercel **file-based Python functions** (`api/*.py`)
-plus static files in `public/`. The radar chart is rendered in the browser, so
-the server bundle does **not** include matplotlib/Pillow.
+The web app is a single Vercel Python function (`api/index.py`, the
+`[tool.vercel] entrypoint` declared in `pyproject.toml`) that serves the API
+routes and the static files in `public/`. The radar chart is rendered in the
+browser, so the server bundle does **not** include matplotlib/Pillow.
 
 ## 1. Push to GitHub
 
@@ -16,8 +17,8 @@ git push
 
 - New Project → import the repo.
 - **Root Directory**: `skills/steam-profile`
-- Framework Preset: **Other** (do not add FastAPI/Flask — that would disable
-  the file-based functions and static `public/`).
+- Framework Preset: **Other** (do not add FastAPI/Flask — the entrypoint is
+  `api/index.py`, set via `pyproject.toml`).
 
 ## 3. Provision Upstash Redis
 
@@ -57,6 +58,8 @@ Then in the browser: open the app, sign in through Steam, generate a profile,
 and download the PNG.
 
 ## Routes
+
+All routes are handled by the single entrypoint `api/index.py`:
 
 | Route | Purpose |
 | --- | --- |

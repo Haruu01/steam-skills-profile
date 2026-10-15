@@ -1,9 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "api/**/*.py": {
+    "api/index.py": {
       "maxDuration": 60,
-      "includeFiles": "{api/**,scripts/**,data/**,templates/**,fonts/**,config*.json}"
+      "includeFiles": "{api/**,scripts/**,data/**,templates/**,fonts/**,public/**,config*.json}"
     }
   }
 }
