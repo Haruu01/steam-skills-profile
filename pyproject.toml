@@ -1,2 +1,11 @@
+[project]
+name = "steam-profile"
+version = "0.1.0"
+description = "Generate a Steam gaming profile infographic"
+requires-python = ">=3.9"
+dependencies = [
+    "requests==2.32.3",
+]
+
 [tool.vercel]
 entrypoint = "api.index:handler"
